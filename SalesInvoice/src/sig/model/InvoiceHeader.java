@@ -25,9 +25,7 @@ public class InvoiceHeader {
         this.customer = customer;
     }
 
-    public InvoiceHeader() {
-        
-    }
+
 
     public String getDate() {
         return date;
@@ -66,8 +64,10 @@ public class InvoiceHeader {
 
     @Override
     public String toString() {
-        return "InvoiceHeader{" + "num="  + ", date=" + date + num + ", customer=" + customer+ '}';
+        return "InvoiceHeader{" + "num="  + num + ", customer=" + customer+ ", date=" + date+ '}';
     }
     
-    
+        public String getAsCSV() {
+        return num + "," + date + "," + customer;
+    }
 }

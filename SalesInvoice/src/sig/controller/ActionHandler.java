@@ -84,7 +84,7 @@ public class ActionHandler implements ActionListener , ListSelectionListener{
 
     
     private void newInv() {
-    InvDialog invDialog= new InvDialog(frame);
+        invDialog= new InvDialog(frame);
         invDialog.setVisible(true);
     }
 
@@ -97,7 +97,8 @@ public class ActionHandler implements ActionListener , ListSelectionListener{
     }
 
     private void newItem() {
-   
+    lineDialog = new LineDialog(frame);
+        lineDialog.setVisible(true);
     }
 
     private void deleteItem() {
@@ -113,7 +114,42 @@ public class ActionHandler implements ActionListener , ListSelectionListener{
     }
 
     private void saveFile() {
-        
+          ArrayList<InvoiceHeader> invoices = frame.getInvoices();
+        String headers = "";
+        String lines = "";
+        for (InvoiceHeader invoice : invoices) {
+            String invCSV = invoice.getAsCSV();
+            headers += invCSV;
+            headers += "\n";
+
+            for (InvoiceLine line : invoice.getLines()) {
+                String lineCSV = line.getAsCSV();
+                lines += lineCSV;
+                lines += "\n";
+            }
+        }
+        System.out.println("Check point");
+        try {
+            JFileChooser fc = new JFileChooser();
+            int result = fc.showSaveDialog(frame);
+            if (result == JFileChooser.APPROVE_OPTION) {
+                File headerFile = fc.getSelectedFile();
+                FileWriter hfw = new FileWriter(headerFile);
+                hfw.write(headers);
+                hfw.flush();
+                hfw.close();
+                result = fc.showSaveDialog(frame);
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    File lineFile = fc.getSelectedFile();
+                    FileWriter lfw = new FileWriter(lineFile);
+                    lfw.write(lines);
+                    lfw.flush();
+                    lfw.close();
+                }
+            }
+        } catch (Exception ex) {
+
+        }
     }
     
     
@@ -152,7 +188,7 @@ public class ActionHandler implements ActionListener , ListSelectionListener{
                     String invoiceDate = headerParts[1];
                     String customerName = headerParts[2];
                     
-                    InvoiceHeader invoice = new InvoiceHeader(invoiceNum, invoiceDate, customerName);
+                    InvoiceHeader invoice = new InvoiceHeader(invoiceNum, customerName,invoiceDate);
                     invoicesArray.add(invoice);
                 }
              System.out.println("Check point");
@@ -194,18 +230,20 @@ public class ActionHandler implements ActionListener , ListSelectionListener{
         }
 
     private void createInvoiceCancel() {
-         invDialog.setVisible(false);
+        invDialog.setVisible(false);
         invDialog.dispose();
         invDialog = null;
     }
 
-    private void createInvoiceOK() {
-         String date = invDialog.getInvDateField().getText();
+    
+        private void createInvoiceOK() {
+      
+        String date = invDialog.getInvDateField().getText();
         String customer = invDialog.getCustNameField().getText();
         int num = frame.getNextInvoiceNum();
-        
-              try {
-            String[] dateParts = date.split("-");  // "22-05-2013" -> {"22", "05", "2013"}  xy-qw-20ij
+       
+        try {
+            String[] dateParts = date.split("-"); 
             if (dateParts.length < 3) {
                 JOptionPane.showMessageDialog(frame, "Wrong date format", "Error", JOptionPane.ERROR_MESSAGE);
             } else {
@@ -215,24 +253,43 @@ public class ActionHandler implements ActionListener , ListSelectionListener{
                 if (day > 31 || month > 12) {
                     JOptionPane.showMessageDialog(frame, "Wrong date format", "Error", JOptionPane.ERROR_MESSAGE);
                 } else {
-                    InvoiceHeader invoice = new InvoiceHeader(num, date, customer);
+                   InvoiceHeader invoice = new InvoiceHeader(num, customer,date);
                     frame.getInvoices().add(invoice);
                     frame.getInvoiceHeaderTable().fireTableDataChanged();
+                    
                     invDialog.setVisible(false);
                     invDialog.dispose();
                     invDialog = null;
                 }
             }
         } catch (Exception ex) {
-            //JOptionPane.showMessageDialog(frame, "Wrong date format", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(frame, "Wrong date format", "Error", JOptionPane.ERROR_MESSAGE);
         }
 
-}
+    }
+    
 
     private void createLineOK() {
-          
+        String item = lineDialog.getItemNameField().getText();
+        String countStr = lineDialog.getItemCountField().getText();
+        String priceStr = lineDialog.getItemPriceField().getText();
+        int count = Integer.parseInt(countStr);
+        double price = Double.parseDouble(priceStr);
+        int selectedInvoice = frame.getHeaderTable().getSelectedRow();
+        if (selectedInvoice != -1) {
+            InvoiceHeader invoice = frame.getInvoices().get(selectedInvoice);
+            InvoiceLine line = new InvoiceLine(invoice.getNum(),item, price, count, invoice);
+            invoice.getLines().add(line);
+        }
+        lineDialog.setVisible(false);
+        lineDialog.dispose();
+        lineDialog = null;
     }
+    
     private void createLineCancel() {
+        lineDialog.setVisible(false);
+        lineDialog.dispose();
+        lineDialog = null;
     }
 
  

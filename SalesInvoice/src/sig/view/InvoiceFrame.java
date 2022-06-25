@@ -287,6 +287,8 @@ private ActionHandler handler = new ActionHandler(this);
 
         
     public ArrayList<InvoiceHeader> getInvoices() {
+        if(invoices==null)
+            invoices=new ArrayList<>();
         return invoices;
     }
 
@@ -446,13 +448,13 @@ private ActionHandler handler = new ActionHandler(this);
    
     public int getNextInvoiceNum()
     {int num=0;
-    for (InvoiceHeader invoice:invoices) 
+    for (InvoiceHeader invoice: getInvoices() ) 
     {
-    if(invoice.getNum() >num)
+        if(invoice.getNum() >num)
         num= invoice.getNum();
                 
     }
-        return num;
+        return  ++num;
     
     } 
 }
