@@ -23,6 +23,7 @@ public class InvoiceLine {
        this.invoice=inv;
     }
 
+   
     public int getCount() {
         return count;
     }
@@ -31,9 +32,7 @@ public class InvoiceLine {
         this.count = count;
     }
 
-    public InvoiceHeader getInvoice() {
-        return invoice;
-    }
+
 
     public void setInvoice(InvoiceHeader invoice) {
         this.invoice = invoice;
@@ -82,6 +81,10 @@ public class InvoiceLine {
 
     public void setInvoiceNum(int invoiceNum) {
         this.invoiceNum = invoiceNum;
+    }
+
+    public InvoiceHeader getInvoice() {
+        return invoice;
     }
     
     

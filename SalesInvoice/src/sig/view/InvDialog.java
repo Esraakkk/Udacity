@@ -55,5 +55,37 @@ public class InvDialog extends JDialog{
     public JTextField getInvDateField() {
         return invDateField;
     }
+
+    public JLabel getCustNameLbl() {
+        return custNameLbl;
+    }
+
+    public void setCustNameLbl(JLabel custNameLbl) {
+        this.custNameLbl = custNameLbl;
+    }
+
+    public JLabel getInvDateLbl() {
+        return invDateLbl;
+    }
+
+    public void setInvDateLbl(JLabel invDateLbl) {
+        this.invDateLbl = invDateLbl;
+    }
+
+    public JButton getOkBtn() {
+        return okBtn;
+    }
+
+    public void setOkBtn(JButton okBtn) {
+        this.okBtn = okBtn;
+    }
+
+    public JButton getCancelBtn() {
+        return cancelBtn;
+    }
+
+    public void setCancelBtn(JButton cancelBtn) {
+        this.cancelBtn = cancelBtn;
+    }
     
 }
